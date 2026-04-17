@@ -3,13 +3,22 @@ let isLoginMode = false;
     // Get users from localStorage or create empty array
     let users = JSON.parse(localStorage.getItem("users")) || [];
 
+
+
     function saveUsers() {
+        
       localStorage.setItem("users", JSON.stringify(users));
+        
     }
+
+
+
 
     function toggleForm() {
       const title = document.getElementById("form-title");
+        
       const btn = document.querySelector("button");
+        
       const switchText = document.querySelector(".switch");
 
       isLoginMode = !isLoginMode;
