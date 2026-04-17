@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Rail Connect</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar h1 { 
+            font-size: 1.8rem; 
+            color: #667eea;
+        }
+
+        .logout-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #764ba2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-section h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-box {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-box h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-box p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .book-tickets-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .book-tickets-box h3,
+        .book-tickets-box p {
+            color: white;
+        }
+
+        .book-tickets-box:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Rail Connect Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+    
+    <div class="container">
+        <div class="welcome-section">
+            <h2>Welcome to Rail Connect! 🚂</h2>
+            <p>Your complete train reservation and information portal</p>
+        </div>
+
+        <div class="features-grid">
+            <a href="booking.html" class="feature-box book-tickets-box">
+                <div class="feature-icon">🎫</div>
+                <h3>Book Tickets</h3>
+                <p>Search and book train tickets for your journey</p>
+            </a>
+
+            <a href="pnr.html" class="feature-box">
+                <div class="feature-icon">📊</div>
+                <h3>PNR Status</h3>
+                <p>Check your booking status in real-time</p>
+            </a>
+
+            <a href="trainschedule.html" class="feature-box">
+                <div class="feature-icon">🚂</div>
+                <h3>Train Schedule</h3>
+                <p>View train timings and availability</p>
+            </a>
+
+            <a href="booking.js" class="feature-box">
+                <div class="feature-icon">📋</div>
+                <h3>My Bookings</h3>
+                <p>Manage all your reservations</p>
+            </a>
+
+            <a href="traininfo.html" class="feature-box">
+                <div class="feature-icon">ℹ️</div>
+                <h3>Train Info</h3>
+                <p>General railway information and updates</p>
+            </a>
+
+            <a href="contact.html" class="feature-box">
+                <div class="feature-icon">📞</div>
+                <h3>Contact Us</h3>
+                <p>Get in touch with our support team</p>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

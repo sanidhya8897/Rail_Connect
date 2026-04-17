@@ -1,0 +1,373 @@
+/* Basic Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Use a common font */
+    background-color: #f4f7f9; /* Light background for the features section */
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* --- 1. Navigation Bar Styling --- */
+.main-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #176fc1; /* RailYatri blue */
+}
+
+/* Placeholder for a logo image */
+.logo-img {
+    width: 25px; 
+    height: 25px;
+    margin-right: 5px;
+    /* In a real project, this would be the actual SVG/PNG */
+    content: url('train.png'); /* Visual placeholder */
+}
+
+.nav-menu {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-size: 15px;
+    padding: 10px 0;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: #176fc1;
+}
+
+.nav-link.active {
+    color: #176fc1;
+    font-weight: bold;
+}
+
+.right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.save-button {
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* --- 2. Main Booking Section (Hero) Styling --- */
+.hero-section {
+    background-color: #176fc1; /* Main blue background */
+    color: white;
+    padding: 30px 0 100px; /* Extra padding at bottom for the form to 'hang' */
+    position: relative; /* Context for potential background image/pattern */
+    /* Add a subtle train image pattern here if needed, as seen in the screenshot */
+    background-image: url('background.png'); /* Placeholder for a repeating train pattern */
+    background-size: cover;
+}
+
+.breadcrumb {
+    font-size: 0.9em;
+    opacity: 0.8;
+    margin-bottom: 10px;
+}
+
+.hero-title {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+.hero-subtitle {
+    font-size: 1.1em;
+    opacity: 0.9;
+    margin-bottom: 30px;
+}
+
+/* Booking Form */
+.booking-form {
+    background-color: white;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 5px 0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 1.2em;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-bottom-color: #176fc1;
+}
+
+.swap-button {
+    background: none;
+    border: 1px solid #ccc;
+    color: #176fc1;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 15px 0 0 0; /* Adjust vertical position */
+}
+
+/* Date Input and Navigation */
+.date-input {
+    min-width: 150px; /* Give date field enough space */
+    border-right: 1px solid #eee;
+    padding-right: 20px;
+}
+
+.date-nav {
+    display: flex;
+    gap: 5px;
+    margin-top: 15px; /* Aligns with the input fields */
+}
+
+.date-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #555;
+    font-size: 0.9em;
+    padding: 5px;
+}
+
+.date-item.active {
+    background-color: #176fc1;
+    color: white;
+    border-color: #176fc1;
+}
+
+.date-item .day {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.search-button {
+    background-color: #e8493d; /* Red search button */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+
+/* --- 3. Feature Section Styling --- */
+.features-section {
+    padding: 60px 0;
+}
+
+.features-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.feature-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns for the 4 cards */
+    gap: 30px;
+    text-align: center;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #eee;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.card-icon {
+    font-size: 2.5em; /* Use an actual icon font here */
+    margin-bottom: 15px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+}
+
+/* Custom background colors for the cards based on the screenshot (Approximation) */
+.icon-pnr { background-color: #e0f7fa; color: #00bcd4; } 
+.icon-cash { background-color: #fffde7; color: #ffeb3b; }
+.icon-clock { background-color: #fbe9e7; color: #ff5722; }
+.icon-secure { background-color: #e8f5e9; color: #4caf50; }
+
+.card-heading {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #176fc1;
+}
+
+.card-text {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* --- 4. Footer Info Section Styling --- */
+.footer-info {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+.footer-info p {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #555;
+}
+
+.train-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.coach-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.coach-card {
+  flex: 1 1 150px;
+  background: #f9fbff;
+  border: 1px solid #dde3f0;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.coach-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.coach-card button {
+  background-color: #176fc1;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.coach-card button:hover {
+  background-color: #0f4f8f;
+}
+
+/* Fade-in animation for Why RailYatri section */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+input[type="date"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 100%;
+  color: #333;
+}
+input[type="date"]:focus {
+  outline: none;
+  border-color: #176fc1;
+  box-shadow: 0 0 4px rgba(23, 111, 193, 0.5);
+}
+
+/* 🔴 Red highlight for invalid date input */
+.input-error {
+  border: 2px solid red !important;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+  animation: shake 0.3s ease-in-out;
+}
+
+/* Small shaking animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}

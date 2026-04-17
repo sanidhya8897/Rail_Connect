@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Schedule - Rail Connect</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-base: 8px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+            }
+        }
+
+        @font-face {
+            font-family: 'FKGroteskNeue';
+            src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-16) var(--space-24);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+            padding: var(--space-8) var(--space-16);
+            background: var(--color-secondary);
+            color: var(--color-text);
+            text-decoration: none;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--color-secondary-hover);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: var(--space-32) var(--space-24);
+        }
+
+        .page-header {
+            margin-bottom: var(--space-32);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-12);
+            color: var(--color-text);
+        }
+
+        .page-description {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-lg);
+        }
+
+        .filters {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-20);
+            margin-bottom: var(--space-24);
+            display: flex;
+            gap: var(--space-16);
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-sm);
+            color: var(--color-text);
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: var(--space-8) var(--space-12);
+            font-size: var(--font-size-base);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-family: var(--font-family-base);
+        }
+
+        .filter-input:focus {
+            outline: 2px solid var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .btn-filter {
+            padding: var(--space-8) var(--space-24);
+            background: var(--color-primary);
+            color: var(--color-cream-50);
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-filter:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .schedule-table {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--color-secondary);
+        }
+
+        th {
+            padding: var(--space-16);
+            text-align: left;
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        td {
+            padding: var(--space-16);
+            font-size: var(--font-size-base);
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-card-border);
+        }
+
+        tbody tr:hover {
+            background: var(--color-secondary);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .train-number {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary);
+        }
+
+        .train-name {
+            font-weight: var(--font-weight-medium);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .badge-ac {
+            background: rgba(var(--color-teal-500-rgb), 0.15);
+            color: var(--color-primary);
+            border: 1px solid rgba(var(--color-teal-500-rgb), 0.25);
+        }
+
+        .badge-non-ac {
+            background: rgba(var(--color-brown-600-rgb), 0.15);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .status-on-time {
+            background: rgba(var(--color-teal-500-rgb), 0.15);
+            color: var(--color-primary);
+        }
+
+        .status-delayed {
+            background: rgba(230, 129, 97, 0.15);
+            color: var(--color-orange-400);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-32);
+            color: var(--color-text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .schedule-table {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 800px;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">🚂 Rail Connect</div>
+            <a href="dashboard.html" class="back-btn">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Train Schedule</h1>
+            <p class="page-description">View real-time train schedules with arrival times, destinations, and seat availability</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label class="filter-label" for="filter-train">Train Number/Name</label>
+                <input type="text" id="filter-train" class="filter-input" placeholder="Search train...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label" for="filter-destination">Destination</label>
+                <input type="text" id="filter-destination" class="filter-input" placeholder="Filter by destination...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label" for="filter-seat">Seat Type</label>
+                <select id="filter-seat" class="filter-input">
+                    <option value="">All</option>
+                    <option value="AC">AC</option>
+                    <option value="Non-AC">Non-AC</option>
+                </select>
+            </div>
+            <button class="btn-filter" onclick="filterTrains()">Apply Filters</button>
+        </div>
+
+        <div class="schedule-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Destination</th>
+                        <th>Seat Type</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-body">
+                    <!-- Train data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const trainData = [
+            {
+                number: "12301",
+                name: "Rajdhani Express",
+                departure: "06:00",
+                arrival: "22:30",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12302",
+                name: "Rajdhani Express",
+                departure: "17:35",
+                arrival: "09:55",
+                destination: "Mumbai",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12951",
+                name: "Mumbai Rajdhani",
+                departure: "16:55",
+                arrival: "08:35",
+                destination: "Mumbai Central",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12952",
+                name: "Mumbai Rajdhani",
+                departure: "16:35",
+                arrival: "08:10",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "Delayed 15 min"
+            },
+            {
+                number: "12429",
+                name: "Duronto Express",
+                departure: "12:25",
+                arrival: "22:00",
+                destination: "Lucknow",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12430",
+                name: "Duronto Express",
+                departure: "21:15",
+                arrival: "06:50",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12433",
+                name: "Rajdhani Express",
+                departure: "06:35",
+                arrival: "10:30",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "Delayed 10 min"
+            },
+            {
+                number: "12434",
+                name: "Chennai Rajdhani",
+                departure: "16:00",
+                arrival: "20:40",
+                destination: "Chennai",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12801",
+                name: "Purushottam SF",
+                departure: "18:30",
+                arrival: "14:35",
+                destination: "Puri",
+                seatType: "Non-AC",
+                status: "On Time"
+            },
+            {
+                number: "12802",
+                name: "Purushottam SF",
+                departure: "20:10",
+                arrival: "16:25",
+                destination: "New Delhi",
+                seatType: "Non-AC",
+                status: "On Time"
+            },
+            {
+                number: "12869",
+                name: "Csmt Howrah SF",
+                departure: "06:10",
+                arrival: "10:05",
+                destination: "Howrah",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12870",
+                name: "Howrah Csmt SF",
+                departure: "16:55",
+                arrival: "20:50",
+                destination: "Mumbai CSMT",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "22691",
+                name: "Rajdhani Express",
+                departure: "16:35",
+                arrival: "09:15",
+                destination: "Bengaluru",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "22692",
+                name: "Rajdhani Express",
+                departure: "20:00",
+                arrival: "12:45",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "Delayed 20 min"
+            },
+            {
+                number: "12423",
+                name: "Dibrugarh Rajdhani",
+                departure: "12:45",
+                arrival: "13:45",
+                destination: "Dibrugarh",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12424",
+                name: "Dibrugarh Rajdhani",
+                departure: "07:40",
+                arrival: "08:55",
+                destination: "New Delhi",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12215",
+                name: "Bandra Garib Rath",
+                departure: "07:05",
+                arrival: "07:00",
+                destination: "Bandra Terminus",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12216",
+                name: "DEE Garib Rath",
+                departure: "18:00",
+                arrival: "18:05",
+                destination: "Delhi S Rohilla",
+                seatType: "AC",
+                status: "On Time"
+            },
+            {
+                number: "12617",
+                name: "Mangala Ldweep",
+                departure: "21:00",
+                arrival: "05:55",
+                destination: "Ernakulam",
+                seatType: "Non-AC",
+                status: "On Time"
+            },
+            {
+                number: "12618",
+                name: "Mangala Ldweep",
+                departure: "11:10",
+                arrival: "19:50",
+                destination: "Hazrat Nizamuddin",
+                seatType: "Non-AC",
+                status: "Delayed 5 min"
+            }
+        ];
+
+        let filteredData = [...trainData];
+
+        function renderTable(data) {
+            const tbody = document.getElementById('schedule-body');
+            
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No trains found matching your filters</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(train => `
+                <tr>
+                    <td><span class="train-number">${train.number}</span></td>
+                    <td><span class="train-name">${train.name}</span></td>
+                    <td>${train.departure}</td>
+                    <td>${train.arrival}</td>
+                    <td>${train.destination}</td>
+                    <td><span class="badge ${train.seatType === 'AC' ? 'badge-ac' : 'badge-non-ac'}">${train.seatType}</span></td>
+                    <td><span class="status-badge ${train.status === 'On Time' ? 'status-on-time' : 'status-delayed'}">${train.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterTrains() {
+            const trainFilter = document.getElementById('filter-train').value.toLowerCase();
+            const destinationFilter = document.getElementById('filter-destination').value.toLowerCase();
+            const seatFilter = document.getElementById('filter-seat').value;
+
+            filteredData = trainData.filter(train => {
+                const matchesTrain = !trainFilter || 
+                    train.number.toLowerCase().includes(trainFilter) || 
+                    train.name.toLowerCase().includes(trainFilter);
+                
+                const matchesDestination = !destinationFilter || 
+                    train.destination.toLowerCase().includes(destinationFilter);
+                
+                const matchesSeat = !seatFilter || train.seatType === seatFilter;
+
+                return matchesTrain && matchesDestination && matchesSeat;
+            });
+
+            renderTable(filteredData);
+        }
+
+        document.getElementById('filter-train').addEventListener('input', filterTrains);
+        document.getElementById('filter-destination').addEventListener('input', filterTrains);
+        document.getElementById('filter-seat').addEventListener('change', filterTrains);
+
+        renderTable(trainData);
+    </script>
+</body>
+</html>

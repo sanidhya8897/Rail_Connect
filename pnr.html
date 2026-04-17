@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNR Status - Rail Connect</title>
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #3b82f6;
+            --accent-color: #60a5fa;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-section h2 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--dark-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ticket-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .ticket-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ticket-header h2 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .status-confirmed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+
+        .status-rac {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 2px solid var(--warning-color);
+        }
+
+        .status-waitlist {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+
+        .journey-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .detail-box {
+            background: var(--dark-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .detail-box h3 {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-box p {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .passengers-section {
+            margin-top: 30px;
+        }
+
+        .passengers-section h3 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .passenger-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--dark-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .passenger-table thead {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .passenger-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: white;
+        }
+
+        .passenger-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .passenger-table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .passenger-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            color: var(--dark-bg);
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid var(--danger-color);
+            color: var(--danger-color);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box ul li {
+            padding: 5px 0;
+            color: var(--text-secondary);
+        }
+
+        .info-box ul li::before {
+            content: "✓ ";
+            color: var(--success-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .form-group {
+                min-width: 100%;
+            }
+
+            .passenger-table {
+                font-size: 0.85rem;
+            }
+
+            .passenger-table th,
+            .passenger-table td {
+                padding: 10px 8px;
+            }
+
+            .journey-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚂 PNR Status Check</h1>
+            <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2>Enter PNR Number</h2>
+            <form class="search-form" id="pnrForm">
+                <div class="form-group">
+                    <label for="pnrNumber">PNR Number (10 digits)</label>
+                    <input 
+                        type="text" 
+                        id="pnrNumber" 
+                        placeholder="e.g., 1234567890" 
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+                </div>
+                <button type="submit" class="search-btn">Check Status</button>
+            </form>
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="info-box">
+                <h4>How to find your PNR Number?</h4>
+                <ul>
+                    <li>PNR number is a 10-digit unique number</li>
+                    <li>Find it on the top-left corner of your train ticket</li>
+                    <li>Also available in your booking confirmation SMS/Email</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Fetching ticket details...</p>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section" id="resultSection">
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    <h2>Ticket Details</h2>
+                    <span class="status-badge" id="statusBadge">CONFIRMED</span>
+                </div>
+
+                <!-- Journey Details -->
+                <div class="journey-details">
+                    <div class="detail-box">
+                        <h3>PNR Number</h3>
+                        <p id="displayPnr">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Train Number</h3>
+                        <p id="trainNumber">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Train Name</h3>
+                        <p id="trainName">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Date of Journey</h3>
+                        <p id="journeyDate">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>From Station</h3>
+                        <p id="fromStation">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>To Station</h3>
+                        <p id="toStation">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Departure Time</h3>
+                        <p id="departureTime">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Arrival Time</h3>
+                        <p id="arrivalTime">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Class</h3>
+                        <p id="travelClass">-</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3>Quota</h3>
+                        <p id="quota">-</p>
+                    </div>
+                </div>
+
+                <!-- Passengers Section -->
+                <div class="passengers-section">
+                    <h3>Passenger Details</h3>
+                    <table class="passenger-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Berth</th>
+                                <th>Seat Number</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="passengerTableBody">
+                            <!-- Passenger rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.print()">🖨️ Print Ticket</button>
+                    <button class="btn btn-secondary" onclick="checkAnotherPNR()">🔍 Check Another PNR</button>
+                    <a href="dashboard.html" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">🏠 Go to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        const sampleTickets = {
+            '1234567890': {
+                pnr: '1234567890',
+                trainNumber: '12301',
+                trainName: 'Rajdhani Express',
+                journeyDate: '2025-10-28',
+                fromStation: 'New Delhi (NDLS)',
+                toStation: 'Mumbai Central (BCT)',
+                departureTime: '16:55',
+                arrivalTime: '08:35 (+1)',
+                class: '3A (AC 3 Tier)',
+                quota: 'General',
+                status: 'CNF',
+                passengers: [
+                    { name: 'Rajesh Kumar', age: 35, gender: 'Male', berth: 'Lower', seatNumber: 'B1-25', status: 'CNF' },
+                    { name: 'Priya Sharma', age: 32, gender: 'Female', berth: 'Middle', seatNumber: 'B1-26', status: 'CNF' }
+                ]
+            },
+            '9876543210': {
+                pnr: '9876543210',
+                trainNumber: '12430',
+                trainName: 'Lucknow Mail',
+                journeyDate: '2025-10-30',
+                fromStation: 'Lucknow (LKO)',
+                toStation: 'Delhi (NDLS)',
+                departureTime: '22:15',
+                arrivalTime: '06:50 (+1)',
+                class: '2A (AC 2 Tier)',
+                quota: 'Tatkal',
+                status: 'RAC',
+                passengers: [
+                    { name: 'Aditya Verma', age: 28, gender: 'Male', berth: 'Side Lower', seatNumber: 'A1-15', status: 'RAC 5' }
+                ]
+            },
+            '5555555555': {
+                pnr: '5555555555',
+                trainNumber: '12951',
+                trainName: 'Mumbai Rajdhani',
+                journeyDate: '2025-11-02',
+                fromStation: 'Mumbai Central (BCT)',
+                toStation: 'New Delhi (NDLS)',
+                departureTime: '16:25',
+                arrivalTime: '08:35 (+1)',
+                class: 'SL (Sleeper)',
+                quota: 'General',
+                status: 'WL',
+                passengers: [
+                    { name: 'Sneha Patel', age: 26, gender: 'Female', berth: 'Upper', seatNumber: '-', status: 'WL 12' },
+                    { name: 'Vikram Singh', age: 45, gender: 'Male', berth: 'Lower', seatNumber: '-', status: 'WL 13' }
+                ]
+            }
+        };
+
+        const form = document.getElementById('pnrForm');
+        const loading = document.getElementById('loading');
+        const resultSection = document.getElementById('resultSection');
+        const errorMessage = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pnrNumber = document.getElementById('pnrNumber').value;
+            
+            if (pnrNumber.length !== 10 || !/^\d+$/.test(pnrNumber)) {
+                showError('Please enter a valid 10-digit PNR number');
+                return;
+            }
+
+            searchPNR(pnrNumber);
+        });
+
+        function searchPNR(pnrNumber) {
+            // Hide previous results and errors
+            resultSection.style.display = 'none';
+            errorMessage.classList.remove('active');
+            
+            // Show loading
+            loading.classList.add('active');
+
+            // Simulate API call delay
+            setTimeout(() => {
+                loading.classList.remove('active');
+
+                // Check if PNR exists in sample data
+                if (sampleTickets[pnrNumber]) {
+                    displayTicket(sampleTickets[pnrNumber]);
+                } else {
+                    showError('PNR not found. Please check the number and try again. For demo, try: 1234567890, 9876543210, or 5555555555');
+                }
+            }, 1500);
+        }
+
+        function displayTicket(ticket) {
+            // Update all ticket details
+            document.getElementById('displayPnr').textContent = ticket.pnr;
+            document.getElementById('trainNumber').textContent = ticket.trainNumber;
+            document.getElementById('trainName').textContent = ticket.trainName;
+            document.getElementById('journeyDate').textContent = formatDate(ticket.journeyDate);
+            document.getElementById('fromStation').textContent = ticket.fromStation;
+            document.getElementById('toStation').textContent = ticket.toStation;
+            document.getElementById('departureTime').textContent = ticket.departureTime;
+            document.getElementById('arrivalTime').textContent = ticket.arrivalTime;
+            document.getElementById('travelClass').textContent = ticket.class;
+            document.getElementById('quota').textContent = ticket.quota;
+
+            // Update status badge
+            const statusBadge = document.getElementById('statusBadge');
+            statusBadge.textContent = getStatusText(ticket.status);
+            statusBadge.className = 'status-badge ' + getStatusClass(ticket.status);
+
+            // Update passenger table
+            const tbody = document.getElementById('passengerTableBody');
+            tbody.innerHTML = '';
+            
+            ticket.passengers.forEach((passenger, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${passenger.name}</td>
+                    <td>${passenger.age}</td>
+                    <td>${passenger.gender}</td>
+                    <td>${passenger.berth}</td>
+                    <td>${passenger.seatNumber}</td>
+                    <td><strong>${passenger.status}</strong></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Show result section
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'CNF': 'CONFIRMED',
+                'RAC': 'RAC (Reservation Against Cancellation)',
+                'WL': 'WAITLISTED'
+            };
+            return statusMap[status] || status;
+        }
+
+        function getStatusClass(status) {
+            const classMap = {
+                'CNF': 'status-confirmed',
+                'RAC': 'status-rac',
+                'WL': 'status-waitlist'
+            };
+            return classMap[status] || 'status-confirmed';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-IN', options);
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+            setTimeout(() => {
+                errorMessage.classList.remove('active');
+            }, 5000);
+        }
+
+        function checkAnotherPNR() {
+            document.getElementById('pnrNumber').value = '';
+            resultSection.style.display = 'none';
+            document.getElementById('pnrNumber').focus();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Allow only numbers in PNR input
+        document.getElementById('pnrNumber').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>
