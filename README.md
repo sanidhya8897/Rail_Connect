@@ -1,5 +1,6 @@
 # Rail-Connect (Modern Approach)
-
+Link to project :
+rail-connect-nine.vercel.app
 Rail Connect is a lightweight, web-based portal for discovering trains, viewing live-like schedules, checking availability, and managing basic reservation workflows in a single, intuitive dashboard interface. It centralizes core user actions—searching trains, viewing timings, and navigating to support or general rail information—through simple HTML/CSS/JS, making it easy to deploy on static hosting such as Vercel while remaining accessible on low-bandwidth connections.​
 
 Unlike traditional desktop-era railway systems that are monolithic, form-heavy, and require specialized access, Rail Connect emphasizes a card-first UI and link-driven navigation optimized for mobile and modern browsers, reducing friction for casual travelers and student projects alike. It forgoes server coupling by default, enabling instant deployments and previews from GitHub, which accelerates iteration and learning cycles for small teams and coursework-focused builds. This contrasts with legacy stacks that often rely on stateful servers and complex, governed release processes, slowing feature delivery and experimentation.​
